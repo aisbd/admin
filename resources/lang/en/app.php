@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'referral-tree' => 'Referral Tree',
     'home' => 'Home',
     'my_profile' => 'My Profile',
     'active_sessions' => 'Active Sessions',

@@ -79,6 +79,11 @@ Route::group(['middleware' => 'auth'], function () {
         'uses' => 'ProfileController@index'
     ]);
 
+    Route::get('referral-tree', [
+        'as' => 'referral-tree',
+        'uses' => 'ProfileController@tree'
+    ]);
+
     Route::get('profile/activity', [
         'as' => 'profile.activity',
         'uses' => 'ProfileController@activity'

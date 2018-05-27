@@ -35,6 +35,13 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('/referral-tree') ? 'active' : ''  }}" href="{{ route('referral-tree') }}">
+                    <i class="fas fa-tree"></i>
+                    <span>@lang('app.referral-tree')</span>
+                </a>
+            </li>
+
             @permission('users.manage')
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('user*') ? 'active' : ''  }}" href="{{ route('user.list') }}">

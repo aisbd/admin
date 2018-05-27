@@ -271,4 +271,9 @@ class ProfileController extends Controller
         return redirect()->route('profile.sessions')
             ->withSuccess(trans('app.session_invalidated'));
     }
+
+    public function tree()
+    {
+        return view('dashboard.tree');
+    }
 }

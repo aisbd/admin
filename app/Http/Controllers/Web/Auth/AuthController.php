@@ -337,12 +337,23 @@ class AuthController extends Controller
             : UserStatus::ACTIVE;
 
         $role = $roles->findByName('User');
-
+        $referral = 0;
+        if(session()->has('_ref')){
+            $referral = Crypt::decryptString(session('_ref'));
+            $referral = \Vanguard\User::find(base64_decode($referral));
+            if($referral){
+                $referral = $referral->id;
+            }else{
+                $referral = 0;
+            }
+        }
         // Add the user to database
         $user = $this->users->create(array_merge(
             $request->only('email', 'username', 'password'),
-            ['status' => $status, 'role_id' => $role->id]
+            ['status' => $status, 'role_id' => $role->id, 'referral' => $referral]
         ));
+        $user->referral_id = base64_encode($user->id);
+        $user->save();
 
         event(new Registered($user));
 
