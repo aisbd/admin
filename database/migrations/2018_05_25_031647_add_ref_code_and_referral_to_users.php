@@ -14,7 +14,7 @@ class AddRefCodeAndReferralToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('referral')->default(0);
+            $table->string('referral')->default(1);
             $table->string('referral_id');
         });
     }

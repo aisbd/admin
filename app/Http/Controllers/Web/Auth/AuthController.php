@@ -337,14 +337,14 @@ class AuthController extends Controller
             : UserStatus::ACTIVE;
 
         $role = $roles->findByName('User');
-        $referral = 0;
+        $referral = 1;
         if(session()->has('_ref')){
             $referral = Crypt::decryptString(session('_ref'));
             $referral = \Vanguard\User::find(base64_decode($referral));
             if($referral){
                 $referral = $referral->id;
             }else{
-                $referral = 0;
+                $referral = 1;
             }
         }
         // Add the user to database

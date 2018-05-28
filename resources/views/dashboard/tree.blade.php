@@ -80,6 +80,12 @@
                 <div class="pt-4 px-3">
                     {{-- tree content --}}
 
+    <link rel="stylesheet" href="/assets/css/treant.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
+
+    <div class="chart" id="basic-example"></div>
+
+
                     {{-- /tree content --}}
                 </div>
             </div>
@@ -91,4 +97,11 @@
 
 @section('scripts')
 
+    <script src="/assets/js/raphael.js"></script>
+    <script src="/assets/js/treant.js"></script>
+
+    <script src="/assets/js/custom.js"></script>
+        <script>
+        new Treant( chart_config );
+    </script>
 @stop

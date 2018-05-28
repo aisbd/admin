@@ -274,6 +274,57 @@ class ProfileController extends Controller
 
     public function tree()
     {
+        if(request()->has("json")){
+          $chart = ['container' => "#basic-example", "connectors" => ['type' => 'step'], "node" => ["HTMLclass" => "nodeExample1"]];
+            
+            $data = \DB::select(
+                                "select  id,
+                                username,
+                                referral 
+                                from    (select * from users
+                                order by referral, id) products_sorted,
+                                (select @pv := '1') initialisation
+                                where   find_in_set(referral, @pv)
+                                and     length(@pv := concat(@pv, ',', id))"
+                            );
+            $refs = [];
+            $i = 1;
+            $users = [];
+            $users[] = $chart;  
+            $u = \Auth::user();
+            $user['text'] = ['name' => $u->username, "title" => "chief executive officer", "contact" => "tel: 10101929"];
+            $user["image"] = "/assets/img/profile.png"; 
+     
+              $refs[$u->id] = $user;
+              $users[] = $user;
+            foreach ($data as $u ) {
+            $user['text'] = ['name' => $u->username, "title" => "chief executive officer", "contact" => "tel: 10101929"];
+            $user["image"] = "/assets/img/profile.png"; 
+  
+                  $user["parent"] = $refs[$u->referral]; 
+            
+              $refs[$u->id] = $user;
+                $users[] = $user;
+                $i++;
+            }
+
+            $data = [];
+            $chart = ['container' => "#basic-example", "connectors" => ['type' => 'step'], "node" => ["HTMLclass" => "nodeExample1"]];
+            
+            $data[] = $chart; 
+ 
+            return $users;
+
+    //             ceo = {
+    //     text: {
+    //         name: "Mark Hill",
+    //         title: "Chief executive officer",
+    //         contact: "Tel: 01 213 123 134",
+    //     },
+    //     image: "../headshots/2.jpg"
+    // },
+            return $t;
+        }
         return view('dashboard.tree');
     }
 }
