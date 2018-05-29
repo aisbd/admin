@@ -16,7 +16,7 @@
             </h5>
 
             <div class="p-4">
-                @include('auth.social.buttons')
+                {{-- @include('auth.social.buttons') --}}
 
                 @include('partials.messages')
 
