@@ -349,9 +349,11 @@ class AuthController extends Controller
         }
         // Add the user to database
         $user = $this->users->create(array_merge(
-            $request->only('email', 'username', 'password'),
+            $request->only('email', 'username', 'password', 'fname', 'lname', 'sponsor_id', 'birth', 'company', 'country', 'street_address', 'apartment', 'city', 'zip', 'phone'),
             ['status' => $status, 'role_id' => $role->id, 'referral' => $referral]
         ));
+
+
         $user->referral_id = base64_encode($user->id);
         $user->save();
 

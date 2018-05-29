@@ -17,6 +17,13 @@ class RegisterRequest extends Request
             'email' => 'required|email|unique:users,email',
             'username' => 'required|unique:users,username',
             'password' => 'required|confirmed|min:6',
+            'fname' => 'required',
+            'lname' => 'required',
+            'sponsor_id' => 'required',
+            'phone' => 'required',
+            'street_address' => 'required',
+            'city' => 'required',
+            'zip' => 'required'
         ];
 
         if (settings('registration.captcha.enabled')) {
