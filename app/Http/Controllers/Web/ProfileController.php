@@ -274,46 +274,74 @@ class ProfileController extends Controller
 
     public function tree()
     {
+        $chart =  [
+        "container" => "#basic-example",
+        "connectors" => [
+            "type" => "step"
+        ],
+        "node" =>  [
+             "HTMLclass" => "nodeExample1"
+        ]
+    ];
         if(request()->has("json")){
-          $chart = ['container' => "#basic-example", "connectors" => ['type' => 'step'], "node" => ["HTMLclass" => "nodeExample1"]];
-            
+            //  dump(request()->data);
+          $chart = ['container' => "#tree", "connectors" => ['type' => 'step'], "node" => ["HTMLclass" => "nodeExample1"]];
+            $id = Auth::user()->id;
             $data = \DB::select(
                                 "select  id,
                                 username,
                                 referral 
                                 from    (select * from users
                                 order by referral, id) products_sorted,
-                                (select @pv := '1') initialisation
+                                (select @pv := '$id') initialisation
                                 where   find_in_set(referral, @pv)
-                                and     length(@pv := concat(@pv, ',', id))"
+                                and     length(@pv := concat(@pv, ',', id))
+                                order by id desc
+                                "
+
+
                             );
-            $refs = [];
-            $i = 1;
-            $users = [];
+                            
             $users[] = $chart;  
-            $u = \Auth::user();
-            $user['text'] = ['name' => $u->username, "title" => "chief executive officer", "contact" => "tel: 10101929"];
-            $user["image"] = "/assets/img/profile.png"; 
-     
-              $refs[$u->id] = $user;
-              $users[] = $user;
+
+              $users = [];
+            // dump($data);
             foreach ($data as $u ) {
-            $user['text'] = ['name' => $u->username, "title" => "chief executive officer", "contact" => "tel: 10101929"];
-            $user["image"] = "/assets/img/profile.png"; 
-  
-                  $user["parent"] = $refs[$u->referral]; 
+              $user = [];
+            $user['text'] = ['name' => $u->username];
+            // $user["image"] = "/assets/img/profile.png"; 
+            // $user["stackChildren"] = true; 
             
-              $refs[$u->id] = $user;
-                $users[] = $user;
-                $i++;
+            if(isset($users[$u->id])){
+               $user['children'] = $users[$u->id]['children'];
+               unset($users[$u->id]);
             }
+                $users[$u->referral]['children'][] =  $user;
+            }
+            // dump($users);
+            $u = \Auth::user();
+            $user = [];
+            $user['text'] = ['name' => $u->username];
+            // $user["image"] = "/assets/img/profile.png"; 
+            if(isset($users[$u->id]['children']))
+            {
+                $user['children'] = $users[$u->id]['children'];
+            }
+           
+            $data = [];
+            // dd($user);
+            $data['nodeStructure'] = $user;
+            $data['chart'] = $chart;
+            return $data;   
+            return request()->data;
+            // dd(request()->data);
 
             $data = [];
             $chart = ['container' => "#basic-example", "connectors" => ['type' => 'step'], "node" => ["HTMLclass" => "nodeExample1"]];
             
             $data[] = $chart; 
- 
-            return $users;
+            dd($users);
+            return ($users);
 
     //             ceo = {
     //     text: {

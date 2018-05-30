@@ -79,7 +79,7 @@ Route::group(['middleware' => 'auth'], function () {
         'uses' => 'ProfileController@index'
     ]);
 
-    Route::get('referral-tree', [
+    Route::any('referral-tree', [
         'as' => 'referral-tree',
         'uses' => 'ProfileController@tree'
     ]);

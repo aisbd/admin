@@ -79,11 +79,17 @@
 
                 <div class="pt-4 px-3">
                     {{-- tree content --}}
+    <div class="col-md-12">
+        <div class="form-group">
 
+            <label class="label-control" for="">Your referral url:</label>
+            <input id="refId" type="text" value="{{url('/register?_ref=')}}{{Auth::user()->referral_id?:''}}" class="form-control">
+        </div>
+    </div>
     <link rel="stylesheet" href="/assets/css/treant.css">
     <link rel="stylesheet" href="/assets/css/custom.css">
 
-    <div class="chart" id="basic-example"></div>
+    <div class="chart" id="tree"></div>
 
 
                     {{-- /tree content --}}
@@ -102,6 +108,6 @@
 
     <script src="/assets/js/custom.js"></script>
         <script>
-        new Treant( chart_config );
+        // new Treant( chart_config );
     </script>
 @stop

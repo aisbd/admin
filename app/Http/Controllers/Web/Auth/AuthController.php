@@ -343,6 +343,15 @@ class AuthController extends Controller
             $referral = \Vanguard\User::find(base64_decode($referral));
             if($referral){
                 $referral = $referral->id;
+                $sql = "select  referral, count(id) from users where id in(select  id
+                                from    (select * from users
+                                order by referral, id) products_sorted,
+                                (select @pv := '$referral') initialisation
+                                where   find_in_set(referral, @pv)
+                                and     length(@pv := concat(@pv, ',', id))
+                                order by id desc) group by referral order by  ";
+                dd($sql);
+                                
             }else{
                 $referral = 1;
             }
