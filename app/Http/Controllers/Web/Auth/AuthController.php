@@ -345,9 +345,13 @@ class AuthController extends Controller
         if(session()->has('_ref')){
             $referral = Crypt::decryptString(session('_ref'));
             $referral = \Vanguard\User::find(base64_decode($referral));
-         
-            if($referral){
+              if($referral){
                 $referral = $referral->id;
+              }
+            }else{
+                $referral = 1;
+            }
+
                 $ids = \DB::select("select  id,
                                 username,
                                 referral 
@@ -371,10 +375,6 @@ class AuthController extends Controller
                                 // dump($ids);
                                 // dd($child);
                                 
-            }else{
-                $referral = 1;
-            }
-        }
         // Add the user to database
         $user = $this->users->create(array_merge(
             $request->only('email', 'username', 'password', 'fname', 'lname', 'sponsor_id', 'birth', 'company', 'country', 'street_address', 'apartment', 'city', 'zip', 'phone'),
