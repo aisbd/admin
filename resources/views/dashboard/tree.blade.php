@@ -83,7 +83,7 @@
         <div class="form-group">
 
             <label class="label-control" for="">Your referral url:</label>
-            <input id="refId" type="text" value="{{url('/register?_ref=')}}{{Auth::user()->referral_id?:''}}" class="form-control">
+            <input id="refId" type="text" value="{{url('/register?ref=')}}{{Auth::user()->referral_id?:''}}" class="form-control">
         </div>
     </div>
     <link rel="stylesheet" href="/assets/css/treant.css">

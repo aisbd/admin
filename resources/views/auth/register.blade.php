@@ -35,7 +35,7 @@
                             <input type="text" name="lname" id="lname" class="form-control" placeholder="Last Name" value="{{ old('lname') }}">
                         </div>
                         <div class="form-group col-md-12">
-                            <input type="text" name="sponsor_id" id="sponsor_id" class="form-control" placeholder="Sponsor ID" value="{{ old('sponsor_id') }}">
+                            <input type="text" name="sponsor_id" id="sponsor_id" class="form-control" placeholder="Sponsor ID" value="{{ old('sponsor_id')?:$referral }}">
                         </div>
                         <div class="form-group col-md-12">
                             <input type="email" name="email" id="email" class="form-control" placeholder="@lang('app.email')" value="{{ old('email') }}">

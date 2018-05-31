@@ -315,10 +315,14 @@ class AuthController extends Controller
         if(request()->has('ref')){
             session()->put("_ref", Crypt::encryptString(request()->ref));
         }
+        $referral = "";
+        if(session()->has('_ref')){
+            $referral = base64_decode(Crypt::decryptString(session('_ref')));
+        }
 
         $socialProviders = config('auth.social.providers');
 
-        return view('auth.register', compact('socialProviders'));
+        return view('auth.register', compact('socialProviders', 'referral'));
     }
 
     /**
@@ -341,16 +345,31 @@ class AuthController extends Controller
         if(session()->has('_ref')){
             $referral = Crypt::decryptString(session('_ref'));
             $referral = \Vanguard\User::find(base64_decode($referral));
+         
             if($referral){
                 $referral = $referral->id;
-                $sql = "select  referral, count(id) from users where id in(select  id
+                $ids = \DB::select("select  id,
+                                username,
+                                referral 
                                 from    (select * from users
                                 order by referral, id) products_sorted,
                                 (select @pv := '$referral') initialisation
                                 where   find_in_set(referral, @pv)
                                 and     length(@pv := concat(@pv, ',', id))
-                                order by id desc) group by referral order by  ";
-                dd($sql);
+                                order by id desc");
+                                $ids = collect($ids)->pluck('id')->toArray();
+                                $ids = join(', ', $ids);
+                                $sql = "select  referral, count(id) from users where id in ($ids) group by referral having count(id) < 3 order by referral desc";
+                                
+                                if($child = \DB::select($sql)){
+                                    $referral = $child[0]->referral;
+                                    // dd($referral);
+                                }else if($child = \DB::select("select id from users where id in ($ids) and  id not in (select id from users where id in ($ids) group by referral having count(id) = 3) order by id asc")){
+                                    $referral = $child[0]->id;
+                                }
+                                // dd($referral);
+                                // dump($ids);
+                                // dd($child);
                                 
             }else{
                 $referral = 1;
