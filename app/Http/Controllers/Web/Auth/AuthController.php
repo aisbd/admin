@@ -364,15 +364,16 @@ class AuthController extends Controller
                                 $ids = collect($ids)->pluck('id')->toArray();
                                 $ids = join(', ', $ids);
                                 $sql = "select  referral, count(id) from users where id in ($ids) group by referral having count(id) < 3 order by referral desc";
-                                
+                            //    dump($child = \DB::select($sql)); 
                                 if($child = \DB::select($sql)){
                                     $referral = $child[0]->referral;
                                     // dd($referral);
-                                }else if($child = \DB::select("select id from users where id in ($ids) and  id not in (select id from users where id in ($ids) group by referral having count(id) = 3) order by id asc")){
+                                }else if($child = \DB::select("select id from users where id in ($ids) and  id not in (select referral from users where id in ($ids) group by referral having count(id) > 2) order by id asc")){
                                     $referral = $child[0]->id;
                                 }
-                                // dd($referral);
                                 // dump($ids);
+                                //  dd(\DB::select("select id, referral, count(id) from users where id in ($ids) group by referral "));
+                                // dd($referral);
                                 // dd($child);
                                 
         // Add the user to database
