@@ -77,7 +77,7 @@
                    Referral Tree
                 </h5>
 
-                <div class="pt-4 px-3">
+                <div style="overflow:scroll" class="pt-4 px-3">
                     {{-- tree content --}}
     <div class="col-md-12">
         <div class="form-group">
