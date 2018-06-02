@@ -29,10 +29,10 @@
                     <form role="form" action="<?= url('register') ?>" method="post" id="registration-form" autocomplete="off" class="mt-3 row">
                         <input type="hidden" value="<?= csrf_token() ?>" name="_token">
                         <div class="form-group col-md-12">
-                            <input type="text" name="fname" id="fname" class="form-control" placeholder="First Name" value="{{ old('fname') }}">
+                            <input type="text" name="first_name" id="first_name" class="form-control" placeholder="First Name" value="{{ old('first_name') }}">
                         </div>
                         <div class="form-group col-md-12">
-                            <input type="text" name="lname" id="lname" class="form-control" placeholder="Last Name" value="{{ old('lname') }}">
+                            <input type="text" name="last_name" id="last_name" class="form-control" placeholder="Last Name" value="{{ old('last_name') }}">
                         </div>
                         <div class="form-group col-md-12">
                             <input type="text" name="sponsor_id" id="sponsor_id" class="form-control" placeholder="Sponsor ID" value="{{ old('sponsor_id')?:$referral }}">
@@ -44,21 +44,19 @@
                             <input type="text" name="phone" id="phone" class="form-control" placeholder="Phone" value="{{ old('phone') }}">
                         </div>
                         <div class="form-group col-md-12">
-                            <input type="text" name="birth" id="birth" class="form-control" placeholder="Date of Birth (dd/mm/yyy)" value="{{ old('birth') }}">
+                            <input type="date" name="birthday" id="birthday" class="form-control" placeholder="Date of Birth (dd/mm/yyy)" value="{{ old('birthday') }}">
                         </div>
                         <div class="form-group col-md-12">
                             <input type="text" name="company" id="company" class="form-control" placeholder="Company (Optional)" value="{{ old('company') }}">
                         </div>
                         <div class="form-group col-md-12">
-                            <select name="country" id="country" class="form-control">
-                                <option value="USA">United States</option>
-                            </select>
+                            {!! Form::select('country_id', $countries,  old('country_id')?:840 , ['class' => 'form-control']) !!}
                         </div>
                         <div class="form-group col-md-12">
                             <input type="text" name="username" id="username" class="form-control" placeholder="@lang('app.username')"  value="{{ old('username') }}">
                         </div>
                         <div class="form-group col-md-12">
-                            <input type="text" name="street_address" id="street_address" class="form-control" placeholder="Street Address"  value="{{ old('street_address') }}">
+                            <input type="text" name="address" id="address" class="form-control" placeholder="Street Address"  value="{{ old('address') }}">
                         </div>
                         <div class="form-group col-md-12">
                             <input type="text" name="apartment" id="apartment" class="form-control" placeholder="Apartment, suite, unit, etc. (optional)"  value="{{ old('apartment') }}">

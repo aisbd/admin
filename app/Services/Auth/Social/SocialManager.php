@@ -47,7 +47,7 @@ class SocialManager
         if (! $user) {
             // User with email retrieved from social auth provider does not
             // exist in our database. That means that we have to create new user here
-            list($firstName, $lastName) = $this->parseUserFullName($socialUser);
+            list($firstName, $lastName) = $this->parseUserFullast_name($socialUser);
 
             $role = $this->roles->findByName('User');
 
@@ -74,7 +74,7 @@ class SocialManager
      * @param SocialUser $user
      * @return array
      */
-    private function parseUserFullName(SocialUser $user)
+    private function parseUserFullast_name(SocialUser $user)
     {
         $name = $user->getName();
 

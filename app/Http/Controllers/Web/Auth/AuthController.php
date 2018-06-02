@@ -310,8 +310,10 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getRegister()
+    public function getRegister( \Vanguard\Repositories\Country\CountryRepository $countryRepository)
     {
+
+           $countries =   [0 => 'Select a Country'] + $countryRepository->lists()->toArray();
         if(request()->has('ref')){
             session()->put("_ref", Crypt::encryptString(request()->ref));
         }
@@ -322,7 +324,7 @@ class AuthController extends Controller
 
         $socialProviders = config('auth.social.providers');
 
-        return view('auth.register', compact('socialProviders', 'referral'));
+        return view('auth.register', compact('socialProviders', 'referral', 'countries'));
     }
 
     /**
@@ -373,12 +375,12 @@ class AuthController extends Controller
                                 }
                                 // dump($ids);
                                 //  dd(\DB::select("select id, referral, count(id) from users where id in ($ids) group by referral "));
-                                // dd($referral);
+                                // dd($referral);   
                                 // dd($child);
                                 
         // Add the user to database
         $user = $this->users->create(array_merge(
-            $request->only('email', 'username', 'password', 'fname', 'lname', 'sponsor_id', 'birth', 'company', 'country', 'street_address', 'apartment', 'city', 'zip', 'phone'),
+            $request->only('email', 'username', 'password', 'first_name', 'last_name', 'sponsor_id', 'birth', 'company', 'country_id', 'address', 'apartment', 'city', 'zip', 'phone'),
             ['status' => $status, 'role_id' => $role->id, 'referral' => $referral]
         ));
 
