@@ -344,9 +344,9 @@ class AuthController extends Controller
 
         $role = $roles->findByName('User');
         $referral = 1;
-        if(session()->has('_ref')){
-            $referral = Crypt::decryptString(session('_ref'));
-            $referral = \Vanguard\User::find(base64_decode($referral));
+        if($request->sponsor_id){
+           
+            $referral = \Vanguard\User::where('email', $request->sponsor_id)->first();
               if($referral){
                 $referral = $referral->id;
               }

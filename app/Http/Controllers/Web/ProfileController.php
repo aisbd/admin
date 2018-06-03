@@ -277,7 +277,8 @@ class ProfileController extends Controller
         $chart =  [
         "container" => "#basic-example",
         "connectors" => [
-            "type" => "step"
+            "type" => "step",
+            "style" => ["stroke" => "#ffffff"]
         ],
         "node" =>  [
              "HTMLclass" => "nodeExample1"
@@ -290,6 +291,11 @@ class ProfileController extends Controller
             $data = \DB::select(
                                 "select  id,
                                 username,
+                                first_name,
+                                last_name,
+                                created_at,
+                                sponsor_id,
+                                email,
                                 referral 
                                 from    (select * from users
                                 order by referral, id) products_sorted,
@@ -308,7 +314,11 @@ class ProfileController extends Controller
             // dump($data);
             foreach ($data as $u ) {
               $user = [];
-            $user['text'] = ['name' => $u->username];
+            $user['innerHTML'] = $this->getHtml($u);
+            $user['connectors'] = [
+            "type" => "step",
+            "style" => ["stroke" => "#ccc"]
+            ];
             // $user["image"] = "/assets/img/profile.png"; 
             // $user["stackChildren"] = true; 
             
@@ -321,8 +331,11 @@ class ProfileController extends Controller
             // dump($users);
             $u = \Auth::user();
             $user = [];
-            $user['text'] = ['name' => $u->username];
-            // $user["image"] = "/assets/img/profile.png"; 
+            $user['innerHTML'] = $this->getHtml($u);
+                        $user['connectors'] = [
+            "type" => "step",
+            "style" => ["stroke" => "#ccc"]
+            ];
             if(isset($users[$u->id]['children']))
             {
                 $user['children'] = $users[$u->id]['children'];
@@ -354,5 +367,23 @@ class ProfileController extends Controller
             return $t;
         }
         return view('dashboard.tree');
+    }
+
+    public function getHtml($user){
+        if(!isset($user->first_name)){
+            // dd($user);
+        }
+        $html = "";
+        $html .= "<div>";
+        $html .= "<span style='font-weight:bold'>". $user->first_name . " ". $user->last_name ."</span>";
+        $html .= "<span style='font-weight:bold'>". $user->first_name . " ". $user->last_name ."</span>";
+        $html .= "<br>";
+        $html .= $user->email;  
+        $html .= "<br>";
+        $html .= "Joined: ".\Carbon\Carbon::parse($user->created_at)->format('M d Y');
+        $html .= "<br>";
+        $html .= "Sponsor: ".$user->sponsor_id;
+        $html .= "</div>";
+        return $html;
     }
 }
