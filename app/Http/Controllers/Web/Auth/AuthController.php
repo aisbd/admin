@@ -364,20 +364,25 @@ class AuthController extends Controller
                                 and     length(@pv := concat(@pv, ',', id))
                                 order by id desc");
                                 $ids = collect($ids)->pluck('id')->toArray();
-                                $ids = join(', ', $ids);
-                                $sql = "select  referral, count(id) from users where id in ($ids) group by referral having count(id) < 3 order by referral desc";
-                            //    dump($child = \DB::select($sql)); 
-                                if($child = \DB::select($sql)){
-                                    $referral = $child[0]->referral;
-                                    // dd($referral);
-                                }else if($child = \DB::select("select id from users where id in ($ids) and  id not in (select referral from users where id in ($ids) group by referral having count(id) > 2) order by id asc")){
-                                    $referral = $child[0]->id;
+                                if(count($ids) != 0){
+                                    $ids = join(', ', $ids);
+                                    $sql = "select  referral, count(id) from users where id in ($ids) group by referral having count(id) < 3 order by referral desc";
+                                //    dump($child = \DB::select($sql)); 
+                                    if($child = \DB::select($sql)){
+                                        $referral = $child[0]->referral;
+                                        // dd($referral);
+                                    }else if($child = \DB::select("select id from users where id in ($ids) and  id not in (select referral from users where id in ($ids) group by referral having count(id) > 2) order by id asc")){
+                                        $referral = $child[0]->id;
+                                    }
                                 }
+
                                 // dump($ids);
                                 //  dd(\DB::select("select id, referral, count(id) from users where id in ($ids) group by referral "));
                                 // dd($referral);   
                                 // dd($child);
-                                
+           if(!$referral){
+            $referral = 1;
+           }                     
         // Add the user to database
         $user = $this->users->create(array_merge(
             $request->only('email', 'username', 'password', 'first_name', 'last_name', 'sponsor_id', 'birth', 'company', 'country_id', 'address', 'apartment', 'city', 'zip', 'phone'),
